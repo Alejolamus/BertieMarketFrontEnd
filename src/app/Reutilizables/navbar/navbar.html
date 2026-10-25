@@ -1,0 +1,311 @@
+<header
+  class="sticky top-0 z-40 w-full bg-brand-dark text-white shadow-[0_2px_8px_rgba(35,48,77,0.24)]"
+>
+  <nav
+    class="relative mx-auto flex h-16 w-full max-w-[1440px] items-center gap-3 px-4 sm:px-6"
+    aria-label="Navegación principal"
+  >
+    <a
+      [routerLink]="esLogin() ? '/login' : '/home'"
+      class="flex min-h-10 shrink-0 items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+    >
+      <span
+        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-blue"
+        aria-hidden="true"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="h-6 w-6"
+        >
+          <path
+            d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0 0 20 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"
+          />
+        </svg>
+      </span>
+      <span class="flex flex-col">
+        <span class="text-base font-semibold leading-tight">Bertie Market</span>
+        <span class="text-[11px] font-normal leading-tight text-brand-border"
+          >Control Operativo</span
+        >
+      </span>
+    </a>
+
+    <span class="hidden h-8 w-px shrink-0 bg-white/20 min-[900px]:block" aria-hidden="true"></span>
+
+    <p
+      class="hidden max-w-[132px] shrink-0 text-[11px] leading-tight text-brand-border min-[960px]:block"
+    >
+      <span class="block">Gestión de inventario</span>
+      <span class="block">administrativo de Tienda</span>
+    </p>
+
+    @if (!esLogin()) {
+      <ul class="ml-2 hidden items-center gap-1 min-[900px]:flex">
+        <li>
+          <a
+            routerLink="/home"
+            routerLinkActive="enlace-activo"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+            class="flex h-16 items-center border-b-2 border-transparent px-3 text-sm font-medium text-brand-border transition-colors hover:border-white/40 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white"
+          >
+            Inicio
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/empleados"
+            routerLinkActive="enlace-activo"
+            ariaCurrentWhenActive="page"
+            class="flex h-16 items-center border-b-2 border-transparent px-3 text-sm font-medium text-brand-border transition-colors hover:border-white/40 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white"
+          >
+            Empleados
+          </a>
+        </li>
+        <li>
+          <button
+            type="button"
+            disabled
+            class="flex h-16 cursor-not-allowed items-center border-b-2 border-transparent px-3 text-sm font-medium text-white/40"
+            title="Disponible próximamente"
+            aria-label="Inventario (disponible próximamente)"
+          >
+            Inventario
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            disabled
+            class="flex h-16 cursor-not-allowed items-center border-b-2 border-transparent px-3 text-sm font-medium text-white/40"
+            title="Disponible próximamente"
+            aria-label="Finanzas (disponible próximamente)"
+          >
+            Finanzas
+          </button>
+        </li>
+      </ul>
+
+      <div class="ml-auto hidden items-center gap-2 min-[900px]:flex">
+        <button
+          type="button"
+          (click)="alternarMenuCuenta()"
+          class="flex h-11 w-11 items-center justify-center rounded-md text-brand-border transition hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          aria-label="Ajustes de la cuenta"
+          aria-controls="menu-cuenta"
+          [attr.aria-expanded]="menuCuenta()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"
+            />
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          (click)="alternarMenuCuenta()"
+          class="flex h-11 items-center gap-2 rounded-md px-2 text-sm font-medium text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          aria-controls="menu-cuenta"
+          [attr.aria-expanded]="menuCuenta()"
+        >
+          <span class="text-brand-border">{{ rolMostrado() }}/</span>
+          <span class="max-w-[140px] truncate">{{ nombreMostrado() }}</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-4 w-4 text-brand-border"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          (click)="cerrarSesion()"
+          class="flex h-11 w-11 items-center justify-center rounded-md text-brand-border transition hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          aria-label="Cerrar sesión"
+          title="Cerrar sesión"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <button
+        type="button"
+        (click)="alternarMenuMovil()"
+        class="ml-auto flex h-11 w-11 items-center justify-center rounded-md text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white min-[900px]:hidden"
+        [attr.aria-expanded]="menuMovil()"
+        aria-controls="menu-movil"
+        [attr.aria-label]="menuMovil() ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'"
+      >
+        @if (menuMovil()) {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            class="h-6 w-6"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        } @else {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            class="h-6 w-6"
+            aria-hidden="true"
+          >
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        }
+      </button>
+    }
+  </nav>
+
+  @if (!esLogin() && menuMovil()) {
+    <nav
+      id="menu-movil"
+      aria-label="Navegación móvil"
+      class="menu-desplegable border-t border-white/10 bg-brand-dark px-4 pb-4 pt-2 min-[900px]:hidden"
+    >
+      <ul class="flex flex-col">
+        <li>
+          <a
+            routerLink="/home"
+            (click)="cerrarMenus()"
+            routerLinkActive="enlace-activo-movil"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+            class="flex min-h-11 items-center rounded-md px-3 text-sm font-medium text-brand-border transition hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white"
+          >
+            Inicio
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/empleados"
+            (click)="cerrarMenus()"
+            routerLinkActive="enlace-activo-movil"
+            ariaCurrentWhenActive="page"
+            class="flex min-h-11 items-center rounded-md px-3 text-sm font-medium text-brand-border transition hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white"
+          >
+            Empleados
+          </a>
+        </li>
+        <li>
+          <button
+            type="button"
+            disabled
+            class="flex min-h-11 cursor-not-allowed items-center rounded-md px-3 text-sm font-medium text-white/40"
+            aria-label="Inventario (disponible próximamente)"
+          >
+            Inventario
+            <span class="ml-2 text-[11px] font-normal">(próximamente)</span>
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            disabled
+            class="flex min-h-11 cursor-not-allowed items-center rounded-md px-3 text-sm font-medium text-white/40"
+            aria-label="Finanzas (disponible próximamente)"
+          >
+            Finanzas
+            <span class="ml-2 text-[11px] font-normal">(próximamente)</span>
+          </button>
+        </li>
+      </ul>
+
+      <div class="mt-3 border-t border-white/10 pt-3">
+        <p class="text-xs text-brand-border">Sesión activa</p>
+        <p class="mt-1 text-sm font-semibold text-white">{{ nombreMostrado() }}</p>
+        <p class="text-xs text-brand-border">Rol: {{ rolMostrado() }}</p>
+
+        <button
+          type="button"
+          (click)="cerrarSesion()"
+          class="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-brand-blue px-4 text-sm font-semibold text-white transition hover:bg-brand-blue-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"
+            />
+          </svg>
+          Cerrar sesión
+        </button>
+      </div>
+    </nav>
+  }
+
+  @if (!esLogin() && menuCuenta()) {
+    <div class="fixed inset-0 z-30" aria-hidden="true" (click)="cerrarMenus()"></div>
+
+    <div
+      id="menu-cuenta"
+      class="menu-desplegable absolute right-4 top-16 z-40 w-72 max-w-[90vw] rounded-lg border border-brand-border bg-white p-4 text-brand-dark shadow-xl sm:right-6"
+    >
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-muted">Sesión activa</p>
+      <p class="mt-2 truncate text-sm font-semibold">{{ nombreMostrado() }}</p>
+      <p class="text-xs text-brand-muted">Rol: {{ rolMostrado() }}</p>
+      <p class="mt-3 rounded-md bg-brand-light p-2 text-xs leading-5 text-brand-muted">
+        Los ajustes de la cuenta estarán disponibles próximamente.
+      </p>
+      <button
+        type="button"
+        (click)="cerrarSesion()"
+        class="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-brand-blue px-4 text-sm font-semibold text-white transition hover:bg-brand-blue-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="h-4 w-4"
+          aria-hidden="true"
+        >
+          <path
+            d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"
+          />
+        </svg>
+        Cerrar sesión
+      </button>
+    </div>
+  }
+</header>

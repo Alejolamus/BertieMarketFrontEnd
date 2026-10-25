@@ -1,0 +1,184 @@
+<section
+  class="w-full rounded-lg border border-brand-border bg-white p-6 shadow-[0_2px_8px_rgba(35,48,77,0.08)]"
+  aria-labelledby="titulo-login"
+>
+  <h1 id="titulo-login" class="text-2xl font-semibold leading-8 text-brand-dark">Iniciar sesión</h1>
+  <p class="mt-1 text-sm text-brand-muted">Completa los datos del colaborador.</p>
+
+  @if (errorCredenciales()) {
+    <div
+      class="mt-5 flex items-start gap-3 rounded-md border border-brand-error/30 bg-brand-error-bg p-3"
+      role="alert"
+      aria-live="assertive"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="mt-0.5 h-5 w-5 shrink-0 text-brand-error"
+        aria-hidden="true"
+      >
+        <path
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+        />
+      </svg>
+      <p class="text-sm font-medium leading-5 text-brand-error">
+        Usuario no identificado, verifique sus credenciales.
+      </p>
+    </div>
+  }
+
+  <form class="mt-6" [formGroup]="formulario" (ngSubmit)="iniciarSesion()" novalidate>
+    <div class="space-y-4">
+      <div>
+        <label for="correo" class="mb-1.5 block text-sm font-medium text-brand-dark">
+          Correo <span class="text-brand-error" aria-hidden="true">*</span>
+        </label>
+        <input
+          id="correo"
+          type="email"
+          formControlName="correo"
+          autocomplete="username"
+          required
+          placeholder="usuario@bertiemarket.com"
+          class="h-[42px] w-full rounded-md border bg-white px-3 text-sm text-brand-dark placeholder:text-brand-muted/60 transition focus:border-2 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+          [class.border-brand-error]="campoInvalido('correo')"
+          [class.border-brand-border]="!campoInvalido('correo')"
+          [attr.aria-invalid]="campoInvalido('correo')"
+          [attr.aria-describedby]="campoInvalido('correo') ? 'error-correo' : null"
+        />
+        @if (campoInvalido('correo')) {
+          <p
+            id="error-correo"
+            class="mt-1.5 text-sm font-medium text-brand-error"
+            aria-live="polite"
+          >
+            {{ mensajeError('correo') }}
+          </p>
+        }
+      </div>
+
+      <div>
+        <label for="clave" class="mb-1.5 block text-sm font-medium text-brand-dark">
+          Contraseña <span class="text-brand-error" aria-hidden="true">*</span>
+        </label>
+        <div class="relative">
+          <input
+            id="clave"
+            [type]="mostrarClave() ? 'text' : 'password'"
+            formControlName="clave"
+            autocomplete="current-password"
+            required
+            placeholder="Ingresa tu contraseña"
+            class="h-[42px] w-full rounded-md border bg-white py-0 pl-3 pr-12 text-sm text-brand-dark placeholder:text-brand-muted/60 transition focus:border-2 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+            [class.border-brand-error]="campoInvalido('clave')"
+            [class.border-brand-border]="!campoInvalido('clave')"
+            [attr.aria-invalid]="campoInvalido('clave')"
+            [attr.aria-describedby]="campoInvalido('clave') ? 'error-clave' : null"
+          />
+          <button
+            type="button"
+            (click)="alternarClave()"
+            class="absolute right-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md text-brand-muted transition hover:bg-brand-light hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-brand-blue"
+            [attr.aria-label]="mostrarClave() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            [attr.aria-pressed]="mostrarClave()"
+          >
+            @if (mostrarClave()) {
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-5 w-5"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"
+                />
+              </svg>
+            } @else {
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-5 w-5"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+                />
+              </svg>
+            }
+          </button>
+        </div>
+        @if (campoInvalido('clave')) {
+          <p
+            id="error-clave"
+            class="mt-1.5 text-sm font-medium text-brand-error"
+            aria-live="polite"
+          >
+            {{ mensajeError('clave') }}
+          </p>
+        }
+
+        <div class="mt-2">
+          <a
+            href="mailto:soporte@bertiemarket.com?subject=Recuperaci%C3%B3n%20de%20contrase%C3%B1a"
+            class="inline-flex min-h-6 items-center rounded-sm text-sm font-medium text-brand-blue underline-offset-2 transition hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+          >
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="mt-6 inline-flex h-11 w-full items-center justify-center rounded-md bg-brand-blue px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-blue-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+    >
+      Iniciar sesión
+    </button>
+  </form>
+
+  <p class="mt-6 border-t border-brand-border pt-4 text-center text-xs leading-5 text-brand-muted">
+    Acceso exclusivo para personal autorizado de Bertie Market.
+  </p>
+
+  <dialog
+    #dialogoError
+    (cancel)="cerrarDialogoError()"
+    class="m-auto w-11/12 max-w-[360px] rounded-lg border border-brand-border bg-white p-6 text-center text-brand-dark shadow-2xl"
+    aria-labelledby="titulo-error-login"
+    aria-describedby="descripcion-error-login"
+  >
+    <div
+      class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-error text-white"
+      aria-hidden="true"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="h-7 w-7"
+      >
+        <path
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+        />
+      </svg>
+    </div>
+
+    <h2 id="titulo-error-login" class="mt-4 text-base font-semibold text-brand-dark">
+      Usuario no identificado
+    </h2>
+    <p id="descripcion-error-login" class="mt-2 text-sm leading-5 text-brand-muted">
+      Usuario no identificado, verifique sus credenciales.
+    </p>
+
+    <button
+      type="button"
+      (click)="cerrarDialogoError()"
+      class="mt-5 inline-flex h-11 min-w-24 items-center justify-center rounded-md bg-brand-blue px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-blue-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+    >
+      OK
+    </button>
+  </dialog>
+</section>

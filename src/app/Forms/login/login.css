@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+dialog::backdrop {
+  background-color: rgb(35 48 77 / 0.6);
+}
+
+dialog[open] {
+  animation: aparecer 150ms ease-out;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog[open] {
+    animation: none;
+  }
+}

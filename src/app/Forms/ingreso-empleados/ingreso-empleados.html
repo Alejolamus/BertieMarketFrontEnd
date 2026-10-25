@@ -1,0 +1,313 @@
+<section class="mx-auto w-full max-w-[760px]" aria-labelledby="titulo-empleados">
+  <form
+    [formGroup]="formulario"
+    (ngSubmit)="guardar()"
+    novalidate
+    class="rounded-lg border border-brand-border bg-white p-5 shadow-[0_2px_8px_rgba(35,48,77,0.08)] sm:p-6"
+  >
+    <header class="border-b border-brand-border pb-4">
+      <h1 id="titulo-empleados" class="text-2xl font-semibold leading-8 text-brand-dark">
+        Gestión de Usuarios
+      </h1>
+      <p class="mt-1 text-sm text-brand-muted">Completa los datos del colaborador.</p>
+      <p class="mt-2 text-xs leading-5 text-brand-muted">
+        Los campos marcados con <span class="text-brand-error">*</span> son obligatorios.
+      </p>
+    </header>
+
+    @if (enviado() && formulario.invalid) {
+      <div
+        class="mt-4 flex items-start gap-3 rounded-md border border-brand-error/30 bg-brand-error-bg p-3"
+        role="alert"
+        aria-live="assertive"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="mt-0.5 h-5 w-5 shrink-0 text-brand-error"
+          aria-hidden="true"
+        >
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+          />
+        </svg>
+        <p class="text-sm font-medium leading-5 text-brand-error">
+          Revisa los campos marcados en rojo antes de guardar.
+        </p>
+      </div>
+    }
+
+    @if (confirmacion()) {
+      <div
+        class="mt-4 flex items-start gap-3 rounded-md border border-brand-blue/40 bg-brand-light p-3"
+        role="status"
+        aria-live="polite"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="mt-0.5 h-5 w-5 shrink-0 text-brand-blue"
+          aria-hidden="true"
+        >
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+          />
+        </svg>
+        <p class="text-sm leading-5 text-brand-dark">
+          <span class="font-semibold">Formulario validado correctamente.</span>
+          En este prototipo los datos no se guardan ni se envían a un servidor.
+        </p>
+      </div>
+    }
+
+    <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2">
+      <div>
+        <label for="nombres" class="mb-1.5 block text-sm font-medium text-brand-dark">
+          Nombres completos <span class="text-brand-error" aria-hidden="true">*</span>
+        </label>
+        <input
+          id="nombres"
+          type="text"
+          formControlName="nombres"
+          autocomplete="name"
+          required
+          placeholder="Ej. William Arthur Montes"
+          class="h-[42px] w-full rounded-md border bg-white px-3 text-sm text-brand-dark placeholder:text-brand-muted/60 transition focus:border-2 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+          [class.border-brand-error]="campoInvalido('nombres')"
+          [class.border-brand-border]="!campoInvalido('nombres')"
+          [attr.aria-invalid]="campoInvalido('nombres')"
+          [attr.aria-describedby]="campoInvalido('nombres') ? 'error-nombres' : null"
+        />
+        @if (campoInvalido('nombres')) {
+          <p
+            id="error-nombres"
+            class="mt-1.5 text-sm font-medium text-brand-error"
+            aria-live="polite"
+          >
+            {{ mensajeError('nombres') }}
+          </p>
+        }
+      </div>
+
+      <div>
+        <label for="correo" class="mb-1.5 block text-sm font-medium text-brand-dark">
+          Correo <span class="text-brand-error" aria-hidden="true">*</span>
+        </label>
+        <input
+          id="correo"
+          type="email"
+          formControlName="correo"
+          autocomplete="email"
+          required
+          placeholder="correo@bertiemarket.com"
+          class="h-[42px] w-full rounded-md border bg-white px-3 text-sm text-brand-dark placeholder:text-brand-muted/60 transition focus:border-2 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+          [class.border-brand-error]="campoInvalido('correo')"
+          [class.border-brand-border]="!campoInvalido('correo')"
+          [attr.aria-invalid]="campoInvalido('correo')"
+          [attr.aria-describedby]="campoInvalido('correo') ? 'error-correo' : null"
+        />
+        @if (campoInvalido('correo')) {
+          <p
+            id="error-correo"
+            class="mt-1.5 text-sm font-medium text-brand-error"
+            aria-live="polite"
+          >
+            {{ mensajeError('correo') }}
+          </p>
+        }
+      </div>
+
+      <div>
+        <label for="tipoDocumento" class="mb-1.5 block text-sm font-medium text-brand-dark">
+          Tipo de documento <span class="text-brand-error" aria-hidden="true">*</span>
+        </label>
+        <div class="relative">
+          <select
+            id="tipoDocumento"
+            formControlName="tipoDocumento"
+            required
+            class="h-[42px] w-full appearance-none rounded-md border bg-white px-3 pr-9 text-sm text-brand-dark transition focus:border-2 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+            [class.border-brand-error]="campoInvalido('tipoDocumento')"
+            [class.border-brand-border]="!campoInvalido('tipoDocumento')"
+            [attr.aria-invalid]="campoInvalido('tipoDocumento')"
+            [attr.aria-describedby]="campoInvalido('tipoDocumento') ? 'error-tipoDocumento' : null"
+          >
+            <option value="" disabled>Selecciona una opción</option>
+            @for (tipo of tiposDocumento; track tipo) {
+              <option [value]="tipo">{{ tipo }}</option>
+            }
+          </select>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-muted"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </div>
+        @if (campoInvalido('tipoDocumento')) {
+          <p
+            id="error-tipoDocumento"
+            class="mt-1.5 text-sm font-medium text-brand-error"
+            aria-live="polite"
+          >
+            {{ mensajeError('tipoDocumento') }}
+          </p>
+        }
+      </div>
+
+      <div>
+        <label for="rol" class="mb-1.5 block text-sm font-medium text-brand-dark">
+          Cargo o rol <span class="text-brand-error" aria-hidden="true">*</span>
+        </label>
+        <div class="relative">
+          <select
+            id="rol"
+            formControlName="rol"
+            required
+            class="h-[42px] w-full appearance-none rounded-md border bg-white px-3 pr-9 text-sm text-brand-dark transition focus:border-2 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+            [class.border-brand-error]="campoInvalido('rol')"
+            [class.border-brand-border]="!campoInvalido('rol')"
+            [attr.aria-invalid]="campoInvalido('rol')"
+            [attr.aria-describedby]="campoInvalido('rol') ? 'error-rol' : null"
+          >
+            <option value="" disabled>Selecciona un rol</option>
+            @for (rol of roles; track rol) {
+              <option [value]="rol">{{ rol }}</option>
+            }
+          </select>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-muted"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </div>
+        @if (campoInvalido('rol')) {
+          <p id="error-rol" class="mt-1.5 text-sm font-medium text-brand-error" aria-live="polite">
+            {{ mensajeError('rol') }}
+          </p>
+        }
+      </div>
+
+      <div>
+        <label for="numeroDocumento" class="mb-1.5 block text-sm font-medium text-brand-dark">
+          Número de documento <span class="text-brand-error" aria-hidden="true">*</span>
+        </label>
+        <input
+          id="numeroDocumento"
+          type="text"
+          formControlName="numeroDocumento"
+          inputmode="numeric"
+          autocomplete="off"
+          required
+          placeholder="1234567890"
+          class="h-[42px] w-full rounded-md border bg-white px-3 text-sm text-brand-dark placeholder:text-brand-muted/60 transition focus:border-2 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+          [class.border-brand-error]="campoInvalido('numeroDocumento')"
+          [class.border-brand-border]="!campoInvalido('numeroDocumento')"
+          [attr.aria-invalid]="campoInvalido('numeroDocumento')"
+          [attr.aria-describedby]="
+            campoInvalido('numeroDocumento') ? 'error-numeroDocumento' : null
+          "
+        />
+        @if (campoInvalido('numeroDocumento')) {
+          <p
+            id="error-numeroDocumento"
+            class="mt-1.5 text-sm font-medium text-brand-error"
+            aria-live="polite"
+          >
+            {{ mensajeError('numeroDocumento') }}
+          </p>
+        }
+      </div>
+
+      <div>
+        <label for="fechaInicio" class="mb-1.5 block text-sm font-medium text-brand-dark">
+          Fecha de inicio <span class="text-brand-error" aria-hidden="true">*</span>
+        </label>
+        <input
+          id="fechaInicio"
+          type="date"
+          formControlName="fechaInicio"
+          [attr.max]="fechaMaxima"
+          required
+          class="h-[42px] w-full rounded-md border bg-white px-3 text-sm text-brand-dark transition focus:border-2 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+          [class.border-brand-error]="campoInvalido('fechaInicio')"
+          [class.border-brand-border]="!campoInvalido('fechaInicio')"
+          [attr.aria-invalid]="campoInvalido('fechaInicio')"
+          [attr.aria-describedby]="campoInvalido('fechaInicio') ? 'error-fechaInicio' : null"
+        />
+        @if (campoInvalido('fechaInicio')) {
+          <p
+            id="error-fechaInicio"
+            class="mt-1.5 text-sm font-medium text-brand-error"
+            aria-live="polite"
+          >
+            {{ mensajeError('fechaInicio') }}
+          </p>
+        }
+      </div>
+
+      <div>
+        <label for="telefono" class="mb-1.5 block text-sm font-medium text-brand-dark">
+          Teléfono <span class="text-brand-error" aria-hidden="true">*</span>
+        </label>
+        <input
+          id="telefono"
+          type="tel"
+          formControlName="telefono"
+          autocomplete="tel"
+          required
+          placeholder="+57 300 000 0000"
+          class="h-[42px] w-full rounded-md border bg-white px-3 text-sm text-brand-dark placeholder:text-brand-muted/60 transition focus:border-2 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+          [class.border-brand-error]="campoInvalido('telefono')"
+          [class.border-brand-border]="!campoInvalido('telefono')"
+          [attr.aria-invalid]="campoInvalido('telefono')"
+          [attr.aria-describedby]="campoInvalido('telefono') ? 'error-telefono' : null"
+        />
+        @if (campoInvalido('telefono')) {
+          <p
+            id="error-telefono"
+            class="mt-1.5 text-sm font-medium text-brand-error"
+            aria-live="polite"
+          >
+            {{ mensajeError('telefono') }}
+          </p>
+        }
+      </div>
+    </div>
+
+    <div
+      class="mt-8 flex flex-col gap-3 border-t border-brand-border pt-6 sm:flex-row sm:justify-end"
+    >
+      <button
+        type="button"
+        (click)="cancelar()"
+        class="inline-flex h-11 min-w-24 items-center justify-center rounded-md border border-brand-dark bg-white px-5 text-sm font-semibold text-brand-dark transition-colors hover:bg-brand-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="inline-flex h-11 min-w-24 items-center justify-center rounded-md bg-brand-blue px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-blue-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+      >
+        Guardar
+      </button>
+    </div>
+  </form>
+</section>
