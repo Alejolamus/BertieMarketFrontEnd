@@ -37,7 +37,7 @@ jobs:
         run: >
           npx ng build
           --configuration production
-          --base-href /BertieMarketFront/
+          --base-href /BertieMarketFrontEnd/
           --output-path dist/gh-pages
 
       - name: Prepare static files
