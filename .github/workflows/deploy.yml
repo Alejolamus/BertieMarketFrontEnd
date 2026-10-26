@@ -1,0 +1,72 @@
+
+name: Deploy Bertie Market to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular
+        run: >
+          npx ng build
+          --configuration production
+          --base-href /BertieMarketFront/
+          --output-path dist/gh-pages
+
+      - name: Prepare static files
+        id: output
+        shell: bash
+        run: |
+          if [ -d dist/gh-pages/browser ]; then
+            SITE_DIR="dist/gh-pages/browser"
+          else
+            SITE_DIR="dist/gh-pages"
+          fi
+
+          test -f "$SITE_DIR/index.html"
+          cp "$SITE_DIR/index.html" "$SITE_DIR/404.html"
+          echo "path=$SITE_DIR" >> "$GITHUB_OUTPUT"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ steps.output.outputs.path }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
